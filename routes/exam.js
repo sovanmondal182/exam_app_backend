@@ -26,6 +26,7 @@ router.get(
 );
 
 // TODO: Add isAdmin middleware
-router.post("/createExam", isSignedIn, isAuthenticated, createExam);
+// router.post("/createExam", isSignedIn, isAuthenticated, createExam);
+router.post("/createExam", createExam);
 
 module.exports = router;

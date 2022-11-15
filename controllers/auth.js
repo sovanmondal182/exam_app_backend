@@ -41,10 +41,11 @@ exports.isSignedIn = expressJwt({
 
 exports.isAuthenticated = (req, res, next) => {
   // Consistent "id"
-  console.log(req?.student, req?.auth, req?.student?._id, req?.auth?.id);
+  // console.log(req?.student, req?.auth, req?.student?._id, req?.auth?.id);
 
   const isAuthenticated =
-    req.student && req.auth && req.student._id === req.auth.id;
+    // req.student && req.auth && req.student._id === req.auth.id;
+    req.student._id == req.auth.id;
 
   if (!isAuthenticated) {
     return handleError(res, "Access denied, please login!", 403);

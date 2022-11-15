@@ -14,6 +14,7 @@ exports.getExamById = (req, res, next, id) => {
 
 exports.getAssignedExamList = (req, res) => {
   const assignedExams = req.student.assignedExams;
+  
   const assignedExamIds = assignedExams.map((exam) => exam.examId);
 
   Exam.find({ _id: { $in: assignedExamIds } })

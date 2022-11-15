@@ -1,5 +1,6 @@
 const { handleError, handleSuccess } = require("../utils/handleResponse");
 const Student = require("../models/student");
+const Exam = require("../models/exam");
 
 exports.getStudentByID = (req, res, next, id) => {
   Student.findById(id, (err, student) => {
@@ -15,10 +16,24 @@ exports.submitExam = (req, res) => {
   const student = new Student(req.student);
 
   student.submittedExams[examId] = answers;
-
   student.save((err, student) => {
     if (err) handleError(res, "Error submitting Exam!");
-
-    res.json(student.submittedExams);
+    if (student) {
+      Exam.findById(examId, (err, exam) => {
+        if (err) handleError(res, "Error calculating exam result!");
+        if (exam) {
+          let score = 0;
+          exam?.answerKeys.forEach((answerKey, i) => {
+            if (answerKey === answers[i]) {
+              score += 1;
+            }
+          });
+          res.json({ 
+            ...student?.submittedExams,
+            score,
+          });
+        }
+      });
+    }
   });
 };
