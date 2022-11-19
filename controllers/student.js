@@ -13,7 +13,8 @@ exports.getStudentByID = (req, res, next, id) => {
 exports.submitExam = (req, res) => {
   try {
     const { examId, answers } = req.body;
-
+    console.log("Exam ID: ", examId);
+    console.log("Answers: ", answers);
     const student = new Student(req.student);
 
     student.submittedExams[examId] = answers;
@@ -44,5 +45,8 @@ exports.submitExam = (req, res) => {
     });
   } catch (err) {
     handleError(res, err);
+    console.log("Exam ID: ", examId);
+    console.log("Answers: ", answers);
+
   }
 };
