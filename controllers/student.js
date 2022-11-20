@@ -11,29 +11,33 @@ exports.getStudentByID = (req, res, next, id) => {
 };
 
 exports.submitExam = (req, res) => {
-  const { examId, answers } = req.body;
+  try {
+    const { examId, answers } = req.body;
 
-  const student = new Student(req.student);
-  console.log(examId, answers);
-  student.submittedExams[examId] = answers;
-  student.save((err, student) => {
-    if (err) handleError(res, "Error submitting Exam!");
-    if (student) {
-      Exam.findById(examId, (err, exam) => {
-        if (err) handleError(res, "Error calculating exam result!");
-        if (exam) {
-          let score = 0;
-          exam?.answerKeys.forEach((answerKey, i) => {
-            if (answerKey === answers[i]) {
-              score += 1;
-            }
-          });
-          res.json({ 
-            ...student?.submittedExams,
-            score,
-          });
-        }
-      });
-    }
-  });
+    const student = new Student(req.student);
+    console.log(examId, answers);
+    student.submittedExams[examId] = answers;
+    student.save((err, student) => {
+      if (err) handleError(res, "Error submitting Exam!");
+      if (student) {
+        Exam.findById(examId, (err, exam) => {
+          if (err) handleError(res, "Error calculating exam result!");
+          if (exam) {
+            let score = 0;
+            exam?.answerKeys.forEach((answerKey, i) => {
+              if (answerKey === answers[i]) {
+                score += 1;
+              }
+            });
+            res.json({
+              ...student?.submittedExams,
+              score,
+            });
+          }
+        });
+      }
+    });
+  } catch (err) {
+    handleError(res, err.message);
+  }
 };
