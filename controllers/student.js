@@ -15,7 +15,7 @@ exports.submitExam = (req, res) => {
     const { examId, answers } = req.body;
 
     const student = new Student(req.student);
-    console.log(examId, answers);
+    console.log(examId, answers); 
     student.submittedExams[examId] = answers;
     student.save((err, student) => {
       if (err) handleError(res, "Error submitting Exam!");
@@ -30,7 +30,7 @@ exports.submitExam = (req, res) => {
               }
             });
             res.json({
-              ...student?.submittedExams,
+              ...student?.submittedExams?.[examId],
               score,
             });
           }
